@@ -1,13 +1,9 @@
 #include "lcd.h"
 
-
 #define _XTAL_FREQ 8000000
-#define RS RD2
-#define EN RD3
-#define D4 RD4
-#define D5 RD5
-#define D6 RD6
-#define D7 RD7
+
+#define RS RE0
+#define EN RE1
 
 //LCD Functions Developed by electroSome
 
@@ -16,13 +12,13 @@ void Lcd_Port(char a)
 {
 	PORTD = a;
 }
-void Lcd_Cmd(char a)
-{
-	RS = 0;             // => RS = 0
-	Lcd_Port(a);
-	EN  = 1;             // => E = 1
-        __delay_ms(4);
-        EN  = 0;             // => E = 0
+
+void Lcd_Cmd(char a) {
+    RS = 0; // => RS = 0
+    Lcd_Port(a);
+    EN = 1; // => E = 1
+    __delay_ms(4);
+    EN = 0; // => E = 0
 }
 
 void Lcd_Clear()
@@ -46,25 +42,25 @@ void Lcd_Set_Cursor(char a, char b)
 	}
 }
 
-void Lcd_Init()
-{
-  Lcd_Port(0x00);
-   __delay_ms(20);
-  Lcd_Cmd(0x30);
-	__delay_ms(5);
-  Lcd_Cmd(0x30);
-	__delay_ms(11);
-  Lcd_Cmd(0x30);
-  /////////////////////////////////////////////////////
-  Lcd_Cmd(0x3C);
-  Lcd_Cmd(0x08);
-  Lcd_Cmd(0x01);
-  Lcd_Cmd(0x07);
+void Lcd_Init() {
+    __delay_ms(20);
+    Lcd_Port(0x00);
+    __delay_ms(20);
+    Lcd_Cmd(0x30);
+    __delay_ms(5);
+    Lcd_Cmd(0x30);
+    __delay_ms(11);
+    Lcd_Cmd(0x30);
+
+    Lcd_Cmd(0x38);
+    Lcd_Cmd(0x10);
+    Lcd_Cmd(0x01);
+    Lcd_Cmd(0x06);
+    Lcd_Cmd(0x0C);
 }
 
 void Lcd_Write_Char(char a)
 {
-   char temp,y;
    RS = 1;             // => RS = 1
    Lcd_Port(a); //Data transfer
    EN = 1;      //Enable
