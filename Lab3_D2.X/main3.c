@@ -6,7 +6,10 @@
  */
 
 
-#include <xc.h>
+#include <xc.h
+#include "ADC.h"
+#include <sdint.h>
+#include <lcd.h>
 
 void main(void) {
     return;
