@@ -42,11 +42,18 @@
 //******************************************************************************
 
 void setup (void);
+void screen (void);
 
 //******************************************************************************
 //                          Ciclo principal
 //******************************************************************************
 void main(void) {
+    setup();
+    Lcd_Init();
+    Lcd_Clear();
+    while (1){
+        screen();
+    }
     return;
 }
 
@@ -77,4 +84,13 @@ void setup (void) {
     INTCONbits.GIE = 1; //Global Interrupts Enable
     INTCONbits.PEIE = 1; //Periferal Interrupts Enable
     
+}
+
+void screen(void){
+        Lcd_Set_Cursor(1,1);        //Set cursor on file 1, position 1
+        Lcd_Write_String ("S1: ");  //Write the text
+        Lcd_Set_Cursor(1, 7);
+        Lcd_Write_String ("S2: ");
+        Lcd_Set_Cursor(1, 14);
+        Lcd_Write_String ("S3: ");
 }
