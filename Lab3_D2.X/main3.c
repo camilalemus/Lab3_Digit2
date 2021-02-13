@@ -37,6 +37,11 @@
 #include <stdint.h>
 #include "lcd.h"
 
+#define _XTAL_FREQ (8000000)
+
+uint8_t ADC_cflag;
+uint8_t ADC_analogvalue;
+
 //******************************************************************************
 //                          Instanciar Funciones
 //******************************************************************************
@@ -53,6 +58,12 @@ void main(void) {
     Lcd_Clear();
     while (1){
         screen();
+        PORTC = ADC_analogvalue;
+        if (ADC_cflag == 1) { // When the value is copied on my display
+            __delay_us(500); // Wait the required acquisition time
+            ADC_cflag = 0; // Turn off the adc_c flag
+            ADCON0bits.GO = 1; // Start ADC Convertion
+        }
     }
     return;
 }
@@ -93,4 +104,12 @@ void screen(void){
         Lcd_Write_String ("S2: ");
         Lcd_Set_Cursor(1, 14);
         Lcd_Write_String ("S3: ");
+}
+
+void __interrupt()isr(void){
+    if (PIR1bits.ADIF == 1){
+        ADC_analogvalue = ADRESH;
+        ADC_cflag = 1; 
+        PIR1bits.ADIF = 0;
+    }
 }
